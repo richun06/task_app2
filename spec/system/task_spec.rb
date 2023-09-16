@@ -1,5 +1,7 @@
 require 'rails_helper'
 RSpec.describe 'タスク管理機能', type: :system do
+  let!(:task) { FactoryBot.create(:task, title: 'task') }
+  let!(:second_task) { FactoryBot.create(:second_task) }
   describe '新規作成機能' do
     context 'タスクを新規作成した場合' do
       it '作成したタスクが表示される' do
@@ -22,6 +24,14 @@ RSpec.describe 'タスク管理機能', type: :system do
         # have_contentされているか（含まれているか）ということをexpectする（確認・期待する）
         expect(page).to have_content 'task'
         # expectの結果が true ならテスト成功、false なら失敗として結果が出力される
+      end
+    end
+
+    context 'タスクが作成日時の降順に並んでいる場合' do
+      it '新しいタスクが一番上に表示される' do
+        visit tasks_path
+        task_list = all('.task_row')
+        expect(page).to have_content 'テストタイトル'
       end
     end
   end
